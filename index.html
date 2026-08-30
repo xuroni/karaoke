@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#121212"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href='https://i.ibb.co/JwWLTZ8N/20260512-224845.png' rel='icon' type='image/x-icon'/>
+    <link href='https://i.ibb.co/JwWLTZ8N/20260512-224845.png' rel='shortcut icon' type='image/x-icon'/>
+    <script> 
+        if (window.location.search.includes('i=')) { 
+            var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname; 
+            window.history.replaceState({path: cleanUrl}, '', cleanUrl); 
+        } 
+    </script> 
+
+    <title>Pro Studio DAW Karaoke Sing</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0b0d16;
+            --bg-gradient: linear-gradient(135deg, #0b0b0b 0%, #161616 100%);
+            --panel-color: #16192b;
+            --accent-color: #00ffcc;
+            --danger-color: #ff3b30;
+            --text-color: #ffffff;
+            --muted-text: #7e8e9f;
+            
+            /* Player Variables */
+            --card-bg: rgba(22, 25, 43, 0.75);
+            --gold-accent: #d4af37;
+            --gold-hover: #f3e5ab;
+            --text-main: #ffffff;
+            --text-sub: #8a8a8a;
+            --progress-bg: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(30px);
+            --plugin-bg: #1c203a;
+        }
+
+        html {
+            -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        *::-webkit-scrollbar { display: none; }
+        *::-webkit-resizer { display: none; }
+        
+        html {
+            scrollbar-color: rgba(0,0,0,0) white;
+            scrollbar-width: thin;
+        }
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+            background-color: white;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0);
+            border-radius: 0px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0d16;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            padding:16px 13px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1250px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 15px;
+            min-width: 0; 
+        }
+
+        @media (max-width: 950px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .main-panel, .mixer-panel {
+            background: var(--panel-color);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #232845;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+            width: 100%;
+            overflow: hidden; 
+            min-width: 0; 
+        }
+
+        @media (max-width: 500px) {
+            .main-panel, .mixer-panel { padding: 15px; }
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid #232845;
+            padding-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* --- LUXURY AUDIO PLAYER CARD ARCHITECTURE --- */
+        .player-container {
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid #232845;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            padding-bottom: 10px;
+            min-width: 0;
+        }
+
+        .player-header {
+            display: flex;
+            flex-direction: column;
+            padding: 15px 0px 5px 0px;
+            z-index: 5;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header-logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .header-logo span {
+            color: var(--gold-accent);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .header-top i {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-sub);
+            transition: color 0.3s ease;
+            padding: 8px;
+        }
+
+        .header-top i:hover { color: var(--gold-accent); }
+
+        .playlist-input-container {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 30px;
+            padding: 6px 14px;
+            align-items: center;
+            justify-content: space-between;
+            width: calc(100% - 30px);
+            margin: 5px 15px;
+        }
+
+        .playlist-input-container input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            outline: none;
+            min-width: 0;
+        }
+
+        .playlist-input-container button {
+            background: #1a1a1a;
+            color: var(--gold-accent);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            width: 34px;
+            height: 34px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .playlist-input-container button:hover {
+            background: var(--gold-accent);
+            color: #000000;
+        }
+
+        .track-details {
+            text-align: center;
+            padding: 10px 15px;
+            width: 100%;
+            overflow: hidden; 
+            min-width: 0;
+        }
+
+        .track-title {
+            font-size: 0.95rem !important;
+            font-weight: 500;
+            color: var(--gold-accent);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+            display: block;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 auto 4px auto;
+        }
+
+        .track-artist {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Progress Bar */
+        .progress-area { padding: 12px 20px; }
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: var(--progress-bg);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #b3922e, #d4af37);
+            border-radius: 10px;
+        }
+        .time-stamps {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            margin-top: 8px;
+        }
+
+        /* Controls */
+        .controls-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 20px 12px 20px;
+        }
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .control-btn.active {
+            color: var(--gold-accent);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+        }
+        .control-btn.play-pause-btn {
+            width: 52px;
+            height: 52px;
+            background: var(--gold-accent);
+            color: #000000;
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.25);
+        }
+
+        /* Drawer Playlist */
+        .playlist-drawer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(14, 14, 14, 0.98);
+            backdrop-filter: var(--glass-blur);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px 20px 0 0;
+            z-index: 10;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+        }
+        .playlist-drawer.open { transform: translateY(0); }
+        .playlist-header {
+            padding: 15px 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gold-accent);
+        }
+        .playlist-header i { cursor: pointer; color: var(--text-sub); }
+        #playlist-items-container { flex: 1; overflow-y: auto; padding: 5px 0; }
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            min-width: 0;
+        }
+        .playlist-item:hover { background: rgba(255, 255, 255, 0.03); }
+        .playlist-item.active {
+            background: rgba(212, 175, 55, 0.08);
+            border-left: 3px solid var(--gold-accent);
+        }
+        .playlist-item-info { flex: 1; overflow: hidden; min-width: 0; }
+        .playlist-item-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-main);
+        }
+        .playlist-item-duration { font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; }
+
+        /* Search Modals */
+        .search-modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+        .search-modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-search-box {
+            display: flex;
+            align-items: center;
+            background: #1a1a1a;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 14px;
+            padding: 6px 14px;
+            gap: 12px;
+            margin: 0 15px 15px 15px;
+        }
+        .modal-search-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #eeeeee;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .search-results-list { flex: 1; overflow-y: auto; padding: 0 15px; }
+
+        /* --- STUDIO MIXER CORE ELEMENTS --- */
+        .control-group { margin-bottom: 18px; }
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--muted-text);
+        }
+        .control-label span:last-child {
+            color: var(--accent-color);
+            font-family: monospace;
+        }
+        .slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 4px;
+            background: #232845;
+            outline: none;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+        }
+
+        .btn-row { display: flex; gap: 10px; margin-bottom: 20px; }
+        button.action-btn {
+            padding: 10px 15px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            color: #0b0d16;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            flex: 1;
+        }
+        .mute-btn { background: #232845 !important; color: white !important; border: 1px solid #3b436e !important; }
+        .mute-btn.muted { background: var(--danger-color) !important; border-color: var(--danger-color) !important; }
+        
+        .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .preset-btn {
+            background: #232845;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .preset-btn.active { background: rgba(0, 255, 204, 0.1); border-color: var(--accent-color); color: var(--accent-color); }
+        
+        .mic-status { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 12px; background: #0b0d16; border-radius: 8px; font-size: 0.9rem; }
+        .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--danger-color); }
+        .status-dot.active { background: #00ff55; box-shadow: 0 0 10px #00ff55; }
+        .visualizer-container { width: 100%; height: 60px; background: #0b0d16; border-radius: 8px; overflow: hidden; border: 1px solid #232845; }
+        canvas { width: 100%; height: 100%; }
+
+        /* --- PROFESSIONAL DAW EXTRA EFFECT RACK --- */
+        .fx-rack-section {
+            grid-column: 1 / -1;
+            background: var(--panel-color);
+            border: 1px solid #232845;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 15px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+        .fx-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        @media (max-width: 1100px) { .fx-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 850px) { .fx-grid { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 550px) { .fx-grid { grid-template-columns: 1fr; } }
+
+        .fx-box {
+            background: var(--plugin-bg);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-left: 3px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .fx-box:hover {
+            transform: translateY(-2px);
+            background: #23294c;
+            border-color: var(--accent-color);
+            box-shadow: 0 5px 15px rgba(0,255,204,0.1);
+        }
+        .fx-box.bypassed {
+            border-left-color: var(--muted-text);
+            opacity: 0.6;
+        }
+        .fx-box h3 { font-size: 0.95rem; color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .fx-box h3 i { color: var(--accent-color); font-size: 0.85rem; }
+        .fx-box.bypassed h3 i { color: var(--muted-text); }
+        .fx-box p { font-size: 0.75rem; color: var(--muted-text); }
+        .fx-status-indicator { position: absolute; right: 12px; top: 15px; width: 6px; height: 6px; border-radius: 50%; background: #00ff55; }
+        .fx-box.bypassed .fx-status-indicator { background: var(--danger-color); }
+
+        /* Special highlight for Auto-Tune box */
+        .fx-box.autotune-box {
+            border-left-color: #ff00ff;
+        }
+        .fx-box.autotune-box h3 i { color: #ff00ff; }
+
+        /* --- PRO DAW PLUGIN INTERACTIVE POPUP MODALS --- */
+        .daw-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 6, 10, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 15px;
+        }
+        .daw-modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .daw-plugin-window {
+            background: #131627;
+            border: 2px solid #2e355c;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .daw-modal-overlay.active .daw-plugin-window { transform: scale(1); }
+        
+        .plugin-header-bar {
+            background: #1c203a;
+            padding: 12px 20px;
+            border-bottom: 1px solid #2e355c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .plugin-header-bar h4 { font-size: 0.95rem; color: var(--accent-color); letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        .plugin-header-bar h4 span { font-size: 0.75rem; background: #0b0d16; padding: 2px 8px; border-radius: 20px; color: var(--muted-text); }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* Plugin Toggle Switch UI */
+        .plugin-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 22px;
+        }
+        .plugin-switch input { opacity: 0; width: 0; height: 0; }
+        .switch-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #232845;
+            transition: .3s;
+            border-radius: 34px;
+            border: 1px solid #3b436e;
+        }
+        .switch-slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .switch-slider { background-color: var(--accent-color); border-color: var(--accent-color); }
+        input:checked + .switch-slider:before { transform: translateX(24px); background-color: #0b0d16; }
+
+        /* AutoTune Custom Switch UI Accent */
+        #autotune-modal input:checked + .switch-slider { background-color: #ff00ff; border-color: #ff00ff; }
+
+        .plugin-close-btn { background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; opacity: 0.7; }
+        .plugin-close-btn:hover { opacity: 1; color: var(--danger-color); }
+        
+        .plugin-body { padding: 20px; max-height: 75vh; overflow-y: auto; }
+        
+        /* EQ Specific Multi-Band Container CSS */
+        .eq-bands-wrapper { display: grid; gap: 10px; }
+        .eq-band-line { display: grid; grid-template-columns: 80px 1fr 45px; align-items: center; gap: 10px; font-size: 0.8rem; color: #fff; }
+        .eq-band-line span:first-child { color: var(--muted-text); font-family: monospace; }
+        .eq-band-line span:last-child { color: var(--accent-color); font-family: monospace; text-align: right; }
+
+        #yt-player-container { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+
+        /* ================= CUSTOM STUDIO DARK DROPDOWN STYLES ================= */
+        .custom-select-wrapper {
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+        .custom-select-trigger {
+            background: #181b33;
+            border: 1px solid #3b236e; 
+            padding: 12px 15px;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .custom-select-trigger:hover, .custom-select-wrapper.open .custom-select-trigger {
+            border-color: #ff00ff;
+            box-shadow: 0 0 12px rgba(255,0,255,0.25);
+        }
+        .custom-select-trigger i {
+            color: transparent;
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+        .custom-select-wrapper.open .custom-select-trigger i {
+            transform: rotate(180deg);
+        }
+        .custom-options-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: #14172a;
+            border: 1px solid #4a2e80;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 0, 255, 0.15);
+            z-index: 1000;
+            max-height: 240px;
+            display: none;
+            padding: 6px;
+        }
+        .custom-select-wrapper.open .custom-options-menu {
+            display: block;
+        }
+        /* Options scrollbar styling */
+        .custom-options-menu::-webkit-scrollbar {
+            width: 4px;
+            display: block;
+        }
+        .custom-options-menu::-webkit-scrollbar-thumb {
+            background: #ff00ff;
+            border-radius: 10px;
+        }
+        .custom-option {
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+            margin-bottom: 2px;
+        }
+        .custom-option:hover {
+            background: rgba(255, 0, 255, 0.12);
+            color: #ffffff;
+        }
+        .custom-option.selected {
+            background: rgba(255, 0, 255, 0.22);
+            color: #ff00ff;
+            font-weight: 600;
+        }
+        .custom-option-radio {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #55587a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .custom-option.selected .custom-option-radio {
+            border-color: #ff00ff;
+            background: #ff00ff;
+            box-shadow: 0 0 8px #ff00ff;
+        }
+        .custom-option-radio::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #fff;
+            border-radius: 50%;
+            display: none;
+        }
+        .custom-option.selected .custom-option-radio::after {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Left Side: Audio Playlist Player Card -->
+    <div class="main-panel" style="padding: 0; background: transparent; border: none; box-shadow: none;">
+        <div class="player-container">
+            <div class="player-header">
+                <div class="header-top">
+                    <div class="header-logo">Xuroni <span>SING</span></div>
+                    <i class="fa-solid fa-bars" id="menu-btn" title="Open Playlist"></i>
+                </div>
+                <div class="playlist-input-container">
+                    <input type="text" id="playlist-url-input" placeholder="Search track in playlist..." readonly style="cursor: pointer;">
+                    <button id="load-playlist-btn"><i class="fa-solid fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="track-details">
+                <h2 class="track-title" id="track-title" style="border: none; margin-bottom: 0; padding-bottom: 0; display: block; text-align: center;">Ready to Load...</h2>
+                <p class="track-artist" id="track-artist">Syncing tracks internally</p>
+            </div>
+
+            <div class="progress-area">
+                <div class="progress-bar-container" id="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="time-stamps">
+                    <span id="current-time">0:00</span>
+                    <span id="total-duration">0:00</span>
+                </div>
+            </div>
+
+            <div class="controls-area">
+                <button class="control-btn" id="shuffle-btn"><i class="fa-solid fa-shuffle"></i></button>
+                <button class="control-btn" id="prev-btn"><i class="fa-solid fa-backward-step"></i></button>
+                <button class="control-btn play-pause-btn" id="play-btn"><i class="fa-solid fa-play" id="play-icon"></i></button>
+                <button class="control-btn" id="next-btn"><i class="fa-solid fa-forward-step"></i></button>
+                <button class="control-btn" id="repeat-btn"><i class="fa-solid fa-repeat"></i></button>
+            </div>
+
+            <!-- Playlist Drawer Inside Card Container -->
+            <div class="playlist-drawer" id="playlist-drawer">
+                <div class="playlist-header">
+                    <span>Playlist Tracks</span>
+                    <i class="fa-solid fa-xmark" id="close-drawer-btn"></i>
+                </div>
+                <div id="playlist-items-container">
+                    <div style="padding: 30px; text-align: center; color: var(--text-sub); font-size: 0.9rem;">Syncing track details structure...</div>
+                </div>
+            </div>
+
+            <!-- Search Modal Overlay Component -->
+            <div class="search-modal-overlay" id="search-modal">
+                <div class="modal-search-box">
+                    <input type="text" id="modal-search-input" placeholder="Type track name or artist...">
+                    <i class="fa-solid fa-xmark" id="close-search-btn"></i>
+                </div>
+                <div class="search-results-list" id="search-results-container"></div>
+            </div>
+        </div>
+
+        <!-- Music Track Volume Controls Component -->
+        <div class="control-group" style="margin-top: 15px; background: #16192b; padding: 15px; border-radius: 16px; border: 1px solid #232845;">
+            <div class="control-label">
+                <span style="color: white; font-weight: bold;">Music Track Volume</span>
+                <span id="bgMusicVolVal">80%</span>
+            </div>
+            <input type="range" id="bgMusicVolume" class="slider" min="0" max="100" value="80" oninput="updateMusicVolume(this.value)">
+        </div>
+    </div>
+
+    <!-- Right Side: Vocal Monitoring Mixer Studio Engine -->
+    <div class="mixer-panel">
+        <h2>Vocal Mixer Engine</h2>
+        <div class="mic-status">
+            <div id="statusDot" class="status-dot"></div>
+            <span id="statusText">Microphone: Offline</span>
+        </div>
+        <div class="btn-row">
+            <button id="startMicBtn" class="action-btn" onclick="initAudioEngine()">Connect Mic</button>
+            <button id="muteMicBtn" class="action-btn mute-btn" onclick="toggleMicMute()" disabled>Mute Mic</button>
+        </div>
+        <div class="control-group">
+            <div class="control-label"><span>Microphone Volume</span><span id="micVolVal">80%</span></div>
+            <input type="range" id="micVolume" class="slider" min="0" max="150" value="80" oninput="updateMixerNodes()">
+        </div>
+        <div class="control-group">
+            <div class="control-label"><span>Studio Reverb (Goonj)</span><span id="reverbVal">30%</span></div>
+            <input type="range" id="reverbLevel" class="slider" min="0" max="100" value="30" oninput="updateMixerNodes()">
+        </div>
+        <div class="control-group">
+            <div class="control-label"><span>Vocal Echo / Delay Mix</span><span id="echoVal">0%</span></div>
+            <input type="range" id="echoLevel" class="slider" min="0" max="100" value="0" oninput="updateMixerNodes()">
+        </div>
+        <div class="control-group">
+            <label class="control-label">Studio Presets</label>
+            <div class="preset-grid">
+                <button class="preset-btn active" onclick="applyStudioPreset('dry', this)">Raw / Dry Voice</button>
+                <button class="preset-btn" onclick="applyStudioPreset('studio', this)">Studio Room</button>
+                <button class="preset-btn" onclick="applyStudioPreset('hall', this)">Concert Hall</button>
+                <button class="preset-btn" onclick="applyStudioPreset('echo', this)">Vocal Echo</button>
+            </div>
+        </div>
+      
+        <div class="visualizer-container" style='padding:0px 6px;'><canvas id="visualizer"></canvas></div>
+    </div>
+
+    <!-- Bottom Full Width Row: Professional DAW Extra Effect Rack -->
+    <div class="fx-rack-section">
+        <h2>Professional effects</h2>
+
+        <div class="fx-grid">
+            <div class="fx-box autotune-box" id="card-autotune" onclick="openPluginModal('autotune-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-wand-magic"></i> Auto-Tune Core</h3>
+                <p>Real-time vocal pitch correction & scale snap</p>
+            </div>
+            <div class="fx-box" id="card-compressor" onclick="openPluginModal('compressor-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-compress"></i> Compressor</h3>
+                <p>Dynamic peak control & vocal levelling</p>
+            </div>
+            <div class="fx-box" id="card-limiter" onclick="openPluginModal('limiter-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-sliders"></i> Brickwall Limiter</h3>
+                <p>Prevent clipping distortion & hard ceiling</p>
+            </div>
+            <div class="fx-box" id="card-eq12" onclick="openPluginModal('eq12-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-wave-square"></i> 12-Band Equalizer</h3>
+                <p>Micro-frequency clinical corrective surgery</p>
+            </div>
+            <div class="fx-box" id="card-eq3" onclick="openPluginModal('eq3-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-layer-group"></i> 3-Band Parametric</h3>
+                <p>High Air, Warm Lows & Mid definition</p>
+            </div>
+            <div class="fx-box" id="card-chorus" onclick="openPluginModal('chorus-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Ensemble Chorus</h3>
+                <p>Multi-voice spatial detuning thickening</p>
+            </div>
+            <div class="fx-box" id="card-distortion" onclick="openPluginModal('distortion-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-bolt"></i> Tube Distortion</h3>
+                <p>Warm analog saturation & aggressive bite</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= DAW PLUGINS INTERACTIVE POPUPS MODALS ================= -->
+
+<!-- Auto-Tune Pro Plugin Window Modal -->
+<div class="daw-modal-overlay" id="autotune-modal">
+    <div class="daw-plugin-window">
+        <div class="plugin-header-bar" style="background: #251b3a; border-bottom: 1px solid #4a2e80;">
+            <h4 style="color: #ff00ff;"><i class="fa-solid fa-wand-magic"></i> Auto-Tune <span>Fix</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-autotune" checked onchange="togglePluginState('autotune', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('autotune-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            
+            <!-- Custom Scale Key Dark Dropdown -->
+            <div class="control-group">
+                <label class="control-label">Scale Center Key</label>
+                <div class="custom-select-wrapper" id="atKeyWrapper">
+                    <div class="custom-select-trigger" onclick="toggleCustomDropdown('atKeyWrapper')">
+                        <span id="atKeyTriggerText">C</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options-menu">
+<div style='border-radius:5px;            max-height: 220px;
+            overflow-y: auto;'>
+                        <div class="custom-option selected" onclick="selectCustomOption('atKey', 'C', 'C', this)"><span class="opt-text">C</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'C#', 'C# / Db', this)"><span class="opt-text">C# / Db</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'D', 'D', this)"><span class="opt-text">D</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'D#', 'D# / Eb', this)"><span class="opt-text">D# / Eb</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'E', 'E', this)"><span class="opt-text">E</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'F', 'F', this)"><span class="opt-text">F</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'F#', 'F# / Gb', this)"><span class="opt-text">F# / Gb</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'G', 'G', this)"><span class="opt-text">G</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'G#', 'G# / Ab', this)"><span class="opt-text">G# / Ab</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'A', 'A', this)"><span class="opt-text">A</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'A#', 'A# / Bb', this)"><span class="opt-text">A# / Bb</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atKey', 'B', 'B', this)"><span class="opt-text">B</span><div class="custom-option-radio"></div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Scale Type Dark Dropdown -->
+            <div class="control-group">
+                <label class="control-label">Scale Type</label>
+                <div class="custom-select-wrapper" id="atScaleWrapper">
+                    <div class="custom-select-trigger" onclick="toggleCustomDropdown('atScaleWrapper')">
+                        <span id="atScaleTriggerText">Natural Major</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options-menu">
+                        <div class="custom-option selected" onclick="selectCustomOption('atScale', 'major', 'Natural Major', this)"><span class="opt-text">Natural Major</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atScale', 'minor', 'Natural Minor', this)"><span class="opt-text">Natural Minor</span><div class="custom-option-radio"></div></div>
+                        <div class="custom-option" onclick="selectCustomOption('atScale', 'chromatic', 'Chromatic (All Keys)', this)"><span class="opt-text">Chromatic (All Keys)</span><div class="custom-option-radio"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label"><span>Retune Speed (T-Pain Effect)</span><span id="atSpeedVal">20 ms</span></div>
+                <input type="range" id="atSpeedSlider" class="slider" min="0" max="100" value="20" oninput="document.getElementById('atSpeedVal').innerText = this.value + ' ms'; updateAutoTuneSettings();">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Correction Pitch Amount</span><span id="atAmountVal">100%</span></div>
+                <input type="range" id="atAmountSlider" class="slider" min="0" max="100" value="100" oninput="document.getElementById('atAmountVal').innerText = this.value + '%'; updateAutoTuneSettings();">
+            </div>
+            <div style="background: #0b0d16; border-radius: 8px; padding: 12px; margin-top: 15px; text-align: center; font-size: 0.8rem; border: 1px solid #3b236e; color: #cc66ff;">
+                <i class="fa-solid fa-wave-square fa-pulse"></i> Tracking Target Frequency: <span id="atFreqDisplay" style="font-family: monospace; font-weight: bold; color:#fff;">Auto-Locked</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 1. Compressor Plugin Window -->
+<div class="daw-modal-overlay" id="compressor-modal">
+    <div class="daw-plugin-window">
+        <div class="plugin-header-bar">
+            <h4><i class="fa-solid fa-compress"></i> Compressor <span>Vocal Track</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-compressor" checked onchange="togglePluginState('compressor', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('compressor-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            <div class="control-group">
+                <div class="control-label"><span>Threshold (dB)</span><span id="compThreshVal">-24 dB</span></div>
+                <input type="range" class="slider" min="-60" max="0" value="-24" oninput="document.getElementById('compThreshVal').innerText = this.value + ' dB'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Ratio (Compression Factor)</span><span id="compRatioVal">4.0:1</span></div>
+                <input type="range" class="slider" min="1" max="20" step="0.5" value="4" oninput="document.getElementById('compRatioVal').innerText = parseFloat(this.value).toFixed(1) + ':1'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Attack Speed (ms)</span><span id="compAttackVal">20 ms</span></div>
+                <input type="range" class="slider" min="1" max="100" value="20" oninput="document.getElementById('compAttackVal').innerText = this.value + ' ms'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Release Decay (ms)</span><span id="compReleaseVal">250 ms</span></div>
+                <input type="range" class="slider" min="10" max="1000" value="250" oninput="document.getElementById('compReleaseVal').innerText = this.value + ' ms'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Makeup Gain</span><span id="compGainVal">+3.5 dB</span></div>
+                <input type="range" class="slider" min="0" max="24" step="0.5" value="3.5" oninput="document.getElementById('compGainVal').innerText = '+' + parseFloat(this.value).toFixed(1) + ' dB'">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Brickwall Limiter Window -->
+<div class="daw-modal-overlay" id="limiter-modal">
+    <div class="daw-plugin-window">
+        <div class="plugin-header-bar">
+            <h4><i class="fa-solid fa-sliders"></i> Master Limiter <span>Brickwall</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-limiter" checked onchange="togglePluginState('limiter', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('limiter-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            <div class="control-group">
+                <div class="control-label"><span>Ceiling Margin</span><span id="limitCeilVal">-0.2 dB</span></div>
+                <input type="range" class="slider" min="-6" max="0" step="0.1" value="-0.2" oninput="document.getElementById('limitCeilVal').innerText = this.value + ' dB'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Input Pre-Gain Drive</span><span id="limitDriveVal">+2.0 dB</span></div>
+                <input type="range" class="slider" min="0" max="18" step="0.2" value="2" oninput="document.getElementById('limitDriveVal').innerText = '+' + parseFloat(this.value).toFixed(1) + ' dB'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Release Curve Lookahead</span><span id="limitLookVal">2.5 ms</span></div>
+                <input type="range" class="slider" min="0" max="10" step="0.5" value="2.5" oninput="document.getElementById('limitLookVal').innerText = parseFloat(this.value).toFixed(1) + ' ms'">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. 12-Band Equalizer Window -->
+<div class="daw-modal-overlay" id="eq12-modal">
+    <div class="daw-plugin-window" style="max-width: 650px;">
+        <div class="plugin-header-bar">
+            <h4><i class="fa-solid fa-wave-square"></i> Graphic EQ <span>Stereo</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-eq12" checked onchange="togglePluginState('eq12', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('eq12-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            <div class="eq-bands-wrapper">
+                <div class="eq-band-line"><span>32 Hz</span><input type="range" class="slider" min="-12" max="12" value="0" oninput="document.getElementById('eqv1').innerText=this.value+' dB'"><span id="eqv1">0 dB</span></div>
+                <div class="eq-band-line"><span>64 Hz</span><input type="range" class="slider" min="-12" max="12" value="0" oninput="document.getElementById('eqv2').innerText=this.value+' dB'"><span id="eqv2">0 dB</span></div>
+                <div class="eq-band-line"><span>125 Hz</span><input type="range" class="slider" min="-12" max="12" value="1" oninput="document.getElementById('eqv3').innerText=this.value+' dB'"><span id="eqv3">1 dB</span></div>
+                <div class="eq-band-line"><span>250 Hz</span><input type="range" class="slider" min="-12" max="12" value="-2" oninput="document.getElementById('eqv4').innerText=this.value+' dB'"><span id="eqv4">-2 dB</span></div>
+                <div class="eq-band-line"><span>500 Hz</span><input type="range" class="slider" min="-12" max="12" value="0" oninput="document.getElementById('eqv5').innerText=this.value+' dB'"><span id="eqv5">0 dB</span></div>
+                <div class="eq-band-line"><span>1 kHz</span><input type="range" class="slider" min="-12" max="12" value="2" oninput="document.getElementById('eqv6').innerText=this.value+' dB'"><span id="eqv6">2 dB</span></div>
+                <div class="eq-band-line"><span>2 kHz</span><input type="range" class="slider" min="-12" max="12" value="3" oninput="document.getElementById('eqv7').innerText=this.value+' dB'"><span id="eqv7">3 dB</span></div>
+                <div class="eq-band-line"><span>4 kHz</span><input type="range" class="slider" min="-12" max="12" value="1" oninput="document.getElementById('eqv8').innerText=this.value+' dB'"><span id="eqv8">1 dB</span></div>
+                <div class="eq-band-line"><span>8 kHz</span><input type="range" class="slider" min="-12" max="12" value="4" oninput="document.getElementById('eqv9').innerText=this.value+' dB'"><span id="eqv9">4 dB</span></div>
+                <div class="eq-band-line"><span>12 kHz</span><input type="range" class="slider" min="-12" max="12" value="2" oninput="document.getElementById('eqv10').innerText=this.value+' dB'"><span id="eqv10">2 dB</span></div>
+                <div class="eq-band-line"><span>16 kHz</span><input type="range" class="slider" min="-12" max="12" value="5" oninput="document.getElementById('eqv11').innerText=this.value+' dB'"><span id="eqv11">5 dB</span></div>
+                <div class="eq-band-line"><span>20 kHz</span><input type="range" class="slider" min="-12" max="12" value="3" oninput="document.getElementById('eqv12').innerText=this.value+' dB'"><span id="eqv12">3 dB</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 4. 3-Band Equalizer Window -->
+<div class="daw-modal-overlay" id="eq3-modal">
+    <div class="daw-plugin-window">
+        <div class="plugin-header-bar">
+            <h4><i class="fa-solid fa-layer-group"></i>Parametric<span>EQ</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-eq3" checked onchange="togglePluginState('eq3', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('eq3-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            <div class="control-group">
+                <div class="control-label"><span> Bass / Low Shelf (Girr)</span><span id="eq3BassVal">+2.5 dB</span></div>
+                <input type="range" class="slider" min="-15" max="15" step="0.5" value="2.5" oninput="document.getElementById('eq3BassVal').innerText = (this.value >= 0 ? '+' : '') + this.value + ' dB'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span> Mid-Range Presence (Body)</span><span id="eq3MidVal">-1.0 dB</span></div>
+                <input type="range" class="slider" min="-15" max="15" step="0.5" value="-1" oninput="document.getElementById('eq3MidVal').innerText = (this.value >= 0 ? '+' : '') + this.value + ' dB'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>High / Treble Air (Chhanak)</span><span id="eq3HighVal">+4.0 dB</span></div>
+                <input type="range" class="slider" min="-15" max="15" step="0.5" value="4" oninput="document.getElementById('eq3HighVal').innerText = (this.value >= 0 ? '+' : '') + this.value + ' dB'">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 5. Chorus Plugin Window -->
+<div class="daw-modal-overlay" id="chorus-modal">
+    <div class="daw-plugin-window">
+        <div class="plugin-header-bar">
+            <h4><i class="fa-solid fa-wand-magic-sparkles"></i> Voice Chorus <span>Spatial</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-chorus" checked onchange="togglePluginState('chorus', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('chorus-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            <div class="control-group">
+                <div class="control-label"><span>Chorus Mix Depth</span><span id="chorusDepthVal">45%</span></div>
+                <input type="range" class="slider" min="0" max="100" value="45" oninput="document.getElementById('chorusDepthVal').innerText = this.value + '%'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Modulation LFO Speed</span><span id="chorusSpeedVal">1.5 Hz</span></div>
+                <input type="range" class="slider" min="1" max="100" value="15" oninput="document.getElementById('chorusSpeedVal').innerText = (this.value / 10).toFixed(1) + ' Hz'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Voice Detune Spread</span><span id="chorusSpreadVal">25 cents</span></div>
+                <input type="range" class="slider" min="0" max="50" value="25" oninput="document.getElementById('chorusSpreadVal').innerText = this.value + ' cents'">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 6. Distortion Plugin Window -->
+<div class="daw-modal-overlay" id="distortion-modal">
+    <div class="daw-plugin-window">
+        <div class="plugin-header-bar">
+            <h4><i class="fa-solid fa-bolt"></i>Distortion <span>Saturation</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-distortion" checked onchange="togglePluginState('distortion', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('distortion-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            <div class="control-group">
+                <div class="control-label"><span>Drive Saturation Gain</span><span id="distDriveVal">20%</span></div>
+                <input type="range" class="slider" min="0" max="100" value="20" oninput="document.getElementById('distDriveVal').innerText = this.value + '%'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Tone / High-Cut Filter</span><span id="distToneVal">4.5 kHz</span></div>
+                <input type="range" class="slider" min="10" max="100" value="45" oninput="document.getElementById('distToneVal').innerText = (this.value / 10).toFixed(1) + ' kHz'">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Output Wet/Dry Level</span><span id="distWetVal">15%</span></div>
+                <input type="range" class="slider" min="0" max="100" value="15" oninput="document.getElementById('distWetVal').innerText = this.value + '%'">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="yt-player-container">
+    <div id="yt-player"></div>
+</div>
+
+<script>
+    // --- CUSTOM DROPDOWN INTERACTION CONTROLLER ---
+    function toggleCustomDropdown(wrapperId) {
+        const targetWrapper = document.getElementById(wrapperId);
+        const isOpen = targetWrapper.classList.contains('open');
+        
+        // Close all custom dropdowns first
+        document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+        
+        if (!isOpen) {
+            targetWrapper.classList.add('open');
+        }
+    }
+
+    function selectCustomOption(type, value, label, optionElem) {
+        const wrapper = optionElem.closest('.custom-select-wrapper');
+        
+        // Update selected state visually
+        wrapper.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
+        optionElem.classList.add('selected');
+        
+        // Update Trigger Label
+        if (type === 'atKey') {
+            document.getElementById('atKeyTriggerText').innerText = label;
+            atSelectedKey = value;
+        } else if (type === 'atScale') {
+            document.getElementById('atScaleTriggerText').innerText = label;
+            atSelectedScale = value;
+        }
+        
+        wrapper.classList.remove('open');
+        updateAutoTuneSettings();
+    }
+
+    // Close custom dropdowns on clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.custom-select-wrapper')) {
+            document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+        }
+    });
+
+    // --- DAW MODAL & BYPASS MANAGEMENT ENGINE ---
+    const pluginActiveStates = {
+        autotune: true,
+        compressor: true,
+        limiter: true,
+        eq12: true,
+        eq3: true,
+        chorus: true,
+        distortion: true
+    };
+
+    function openPluginModal(modalId) {
+        document.getElementById(modalId).classList.add('active');
+    }
+    function closePluginModal(modalId) {
+        document.getElementById(modalId).classList.remove('active');
+    }
+
+    function togglePluginState(pluginKey, isEnabled) {
+        pluginActiveStates[pluginKey] = isEnabled;
+        const targetCard = document.getElementById(`card-${pluginKey}`);
+        if (targetCard) {
+            targetCard.classList.toggle('bypassed', !isEnabled);
+        }
+    }
+
+    window.addEventListener('click', function(e) {
+        if(e.target.classList.contains('daw-modal-overlay')) {
+            e.target.classList.remove('active');
+        }
+    });
+
+    // --- YOUTUBE AUDIO ENGINE CONTROL ---
+    let currentPlaylistId = "PLCFWOUnHDgvM";
+    let player;
+    let playlistTracks = [];
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+    let isShuffle = false;
+    let isRepeat = false;
+    let progressInterval;
+
+    // Player Mapping DOM Elements
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    const repeatBtn = document.getElementById('repeat-btn');
+    const title = document.getElementById('track-title');
+    const artist = document.getElementById('track-artist');
+    const progressContainer = document.getElementById('progress-container');
+    const progressBar = document.getElementById('progress-bar');
+    const currentTimeEl = document.getElementById('current-time');
+    const durationTimeEl = document.getElementById('total-duration');
+    const playlistContainer = document.getElementById('playlist-items-container');
+    const menuBtn = document.getElementById('menu-btn');
+    const closeDrawerBtn = document.getElementById('close-drawer-btn');
+    const playlistDrawer = document.getElementById('playlist-drawer');
+    const triggerSearchBox = document.getElementById('playlist-url-input');
+    const triggerSearchBtn = document.getElementById('load-playlist-btn');
+
+    const searchModal = document.getElementById('search-modal');
+    const closeSearchBtn = document.getElementById('close-search-btn');
+    const modalSearchInput = document.getElementById('modal-search-input');
+    const searchResultsContainer = document.getElementById('search-results-container');
+
+    menuBtn.addEventListener('click', () => playlistDrawer.classList.add('open'));
+    closeDrawerBtn.addEventListener('click', () => playlistDrawer.classList.remove('open'));
+
+    const openModalFunc = () => {
+        searchModal.classList.add('show');
+        modalSearchInput.value = '';
+        modalSearchInput.focus();
+        renderSearchResults("");
+    };
+    triggerSearchBox.addEventListener('click', openModalFunc);
+    triggerSearchBtn.addEventListener('click', openModalFunc);
+    closeSearchBtn.addEventListener('click', () => searchModal.classList.remove('show'));
+    modalSearchInput.addEventListener('input', (e) => renderSearchResults(e.target.value));
+
+    function updateMusicVolume(volValue) {
+        document.getElementById('bgMusicVolVal').innerText = volValue + "%";
+        if (player && typeof player.setVolume === 'function') player.setVolume(volValue);
+    }
+
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.getElementsByTagName('script')[0].parentNode.insertBefore(tag, document.getElementsByTagName('script')[0]);
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('yt-player', {
+            height: '200', width: '200',
+            playerVars: { 
+                autoplay: 0, 
+                controls: 0, 
+                disablekb: 1, 
+                fs: 0, 
+                modestbranding: 1, 
+                rel: 0, 
+                showinfo: 0, 
+                enablejsapi: 1,
+                listType: 'playlist',
+                list: currentPlaylistId,
+                origin: window.location.origin 
+            },
+            events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange, 'onError': onPlayerError }
+        });
+    }
+
+    function onPlayerReady(event) {
+        player.setVolume(document.getElementById('bgMusicVolume').value);
+        loadPlaylist(currentPlaylistId);
+    }
+
+    function loadPlaylist(id) {
+        playlistContainer.innerHTML = `<div style="padding: 30px; text-align: center; color: var(--text-sub);"><i class="fa-solid fa-circle-notch fa-spin"></i> Syncing tracks...</div>`;
+        playlistTracks = [];
+        currentTrackIndex = 0;
+        player.cuePlaylist({list: id});
+    }
+
+    function onPlayerError(event) {
+        console.log("YouTube track error, skipping...", event.data);
+        title.textContent = "Skipping Protected Track...";
+        setTimeout(() => { playNextTrack(); }, 2000);
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.CUED || event.data === -1) {
+            const playlistIds = player.getPlaylist();
+            if (playlistIds && playlistIds.length > 0 && playlistTracks.length === 0) {
+                playlistTracks = playlistIds.map((id, index) => {
+                    return { id: id, title: `Karaoke Track #${index + 1}`, artist: "Loading Metadata...", index: index };
+                });
+                buildPlaylistUI();
+                fetchYouTubeVideoTitles();
+            }
+        }
+        if (event.data === YT.PlayerState.PLAYING) {
+            isPlaying = true;
+            playIcon.className = "fa-solid fa-pause";
+            startProgressTracker();
+            syncTrackMeta();
+        } else if (event.data === YT.PlayerState.PAUSED) {
+            isPlaying = false;
+            playIcon.className = "fa-solid fa-play";
+            clearInterval(progressInterval);
+        } else if (event.data === YT.PlayerState.ENDED) {
+            clearInterval(progressInterval);
+            handleTrackEnded();
+        }
+    }
+
+    function fetchYouTubeVideoTitles() {
+        if (!player || typeof player.getPlaylist !== 'function') return;
+        playlistTracks.forEach((track, index) => {
+            fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${track.id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.title) {
+                        track.title = data.title;
+                        track.artist = data.author_name || "Vocal Karaoke";
+                        
+                        const liTitle = document.getElementById(`li-title-${index}`);
+                        const liArtist = document.getElementById(`li-artist-${index}`);
+                        if (liTitle) liTitle.textContent = data.title;
+                        if (liArtist) liArtist.textContent = track.artist;
+                        
+                        if (index === currentTrackIndex) syncTrackMeta();
+                    }
+                }).catch(err => console.log("Metadata error:", err));
+        });
+    }
+
+    function buildPlaylistUI() {
+        playlistContainer.innerHTML = '';
+        playlistTracks.forEach((track, index) => {
+            const item = document.createElement('div');
+            item.classList.add('playlist-item');
+            item.innerHTML = `
+                <div class="playlist-item-info">
+                    <div class="playlist-item-title" id="li-title-${index}">${track.title}</div>
+                    <div class="playlist-item-duration" id="li-artist-${index}">${track.artist}</div>
+                </div>`;
+            item.addEventListener('click', () => { playTrackAt(index); playlistDrawer.classList.remove('open'); });
+            playlistContainer.appendChild(item);
+        });
+        updatePlaylistActiveState();
+    }
+
+    function renderSearchResults(query) {
+        searchResultsContainer.innerHTML = "";
+        const cleanQuery = query.toLowerCase().trim();
+        const filteredTracks = playlistTracks.filter(track => track.title.toLowerCase().includes(cleanQuery) || track.artist.toLowerCase().includes(cleanQuery));
+        if (filteredTracks.length === 0) {
+            searchResultsContainer.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-sub);">No match found</div>`;
+            return;
+        }
+        filteredTracks.forEach((track) => {
+            const item = document.createElement('div');
+            item.classList.add('playlist-item');
+            if (track.index === currentTrackIndex) item.classList.add('active');
+            item.innerHTML = `<div class="playlist-item-info"><div class="playlist-item-title">${track.title}</div><div class="playlist-item-duration">${track.artist}</div></div>`;
+            item.addEventListener('click', () => { playTrackAt(track.index); searchModal.classList.remove('show'); });
+            searchResultsContainer.appendChild(item);
+        });
+    }
+
+    function updatePlaylistActiveState() {
+        document.querySelectorAll('#playlist-items-container .playlist-item').forEach((item, index) => {
+            item.classList.toggle('active', index === currentTrackIndex);
+        });
+    }
+
+    function syncTrackMeta() {
+        if (player && typeof player.getPlaylistIndex === 'function') {
+            const index = player.getPlaylistIndex();
+            if (index !== -1 && index !== undefined && index !== null) {
+                currentTrackIndex = index;
+                const selectedTrack = playlistTracks[index];
+                if (selectedTrack) { 
+                    title.textContent = selectedTrack.title; 
+                    artist.textContent = selectedTrack.artist; 
+                }
+                updatePlaylistActiveState();
+            }
+        }
+    }
+
+    function playTrackAt(index) { 
+        if (index >= 0 && index < playlistTracks.length) { 
+            currentTrackIndex = index; 
+            player.playVideoAt(index); 
+            updatePlaylistActiveState(); 
+        } 
+    }
+
+    playBtn.addEventListener('click', () => { isPlaying ? player.pauseVideo() : player.playVideo(); });
+    prevBtn.addEventListener('click', () => { let prev = currentTrackIndex - 1; if (prev < 0) prev = playlistTracks.length - 1; playTrackAt(prev); });
+    nextBtn.addEventListener('click', () => { playNextTrack(); });
+    
+    function playNextTrack() { let next = currentTrackIndex + 1; if (next >= playlistTracks.length) next = 0; playTrackAt(next); }
+    shuffleBtn.addEventListener('click', () => { isShuffle = !isShuffle; player.setShuffle(isShuffle); shuffleBtn.classList.toggle('active', isShuffle); });
+    repeatBtn.addEventListener('click', () => { isRepeat = !isRepeat; player.setLoop(isRepeat); repeatBtn.classList.toggle('active', isRepeat); });
+    function handleTrackEnded() { isRepeat ? player.playVideo() : (isShuffle ? setTimeout(syncTrackMeta, 500) : playNextTrack()); }
+
+    function startProgressTracker() {
+        clearInterval(progressInterval);
+        progressInterval = setInterval(() => {
+            if (!player || typeof player.getCurrentTime !== 'function') return;
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            if (duration > 0) {
+                progressBar.style.width = `${(currentTime / duration) * 100}%`;
+                currentTimeEl.textContent = formatTime(currentTime);
+                durationTimeEl.textContent = formatTime(duration);
+            }
+        }, 500);
+    }
+    
+    function formatTime(seconds) { let mins = Math.floor(seconds / 60); let secs = Math.floor(seconds % 60); return `${mins}:${secs < 10 ? '0' : ''}${secs}`; }
+    
+    progressContainer.addEventListener('click', (e) => {
+        if (!player || typeof player.getDuration !== 'function') return;
+        const rect = progressContainer.getBoundingClientRect();
+        const duration = player.getDuration();
+        if (duration > 0) player.seekTo(((e.clientX - rect.left) / rect.width) * duration, true);
+    });
+
+    // --- AUDIO MIXER WEBAUDIO PROCESSING ---
+    let audioContextInstance = null, micStreamSource = null, micMasterGain = null, voiceDryGain = null;
+    let delayNodeEffect = null, delayFeedbackNode = null, delayWetGain = null;
+    let reverbConvolver = null, reverbWetGain = null, soundAnalyserNode = null;
+    let isMicMuted = false;
+
+    let atSelectedKey = "C";
+    let atSelectedScale = "major";
+    let atRetuneSpeed = 20;
+    let atCorrectionAmount = 100;
+
+    async function initAudioEngine() {
+        if (audioContextInstance) return;
+        try {
+            audioContextInstance = new (window.AudioContext || window.webkitAudioContext)();
+            micStreamSource = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: true, autoGainControl: false, latency: 0 } });
+            
+            let nativeInputNode = audioContextInstance.createMediaStreamSource(micStreamSource);
+            micMasterGain = audioContextInstance.createGain();
+            voiceDryGain = audioContextInstance.createGain();
+            
+            delayNodeEffect = audioContextInstance.createDelay(1.0);
+            delayFeedbackNode = audioContextInstance.createGain();
+            delayWetGain = audioContextInstance.createGain();
+            delayNodeEffect.delayTime.value = 0.28; delayFeedbackNode.gain.value = 0.35;
+            delayNodeEffect.connect(delayFeedbackNode); delayFeedbackNode.connect(delayNodeEffect);
+
+            reverbConvolver = audioContextInstance.createConvolver();
+            reverbConvolver.buffer = generateProceduralReverbImpulse(2.4, 1.8);
+            reverbWetGain = audioContextInstance.createGain();
+
+            soundAnalyserNode = audioContextInstance.createAnalyser(); soundAnalyserNode.fftSize = 64;
+
+            nativeInputNode.connect(micMasterGain);
+            micMasterGain.connect(voiceDryGain); voiceDryGain.connect(audioContextInstance.destination);
+            micMasterGain.connect(reverbConvolver); reverbConvolver.connect(reverbWetGain); reverbWetGain.connect(audioContextInstance.destination);
+            micMasterGain.connect(delayNodeEffect); delayNodeEffect.connect(delayWetGain); delayWetGain.connect(audioContextInstance.destination);
+            micMasterGain.connect(soundAnalyserNode);
+
+            document.getElementById('statusDot').classList.add('active');
+            document.getElementById('statusText').innerText = "Microphone: Live Active";
+            document.getElementById('startMicBtn').style.display = "none";
+            document.getElementById('muteMicBtn').disabled = false;
+
+            updateMixerNodes(); renderRealtimeWaveforms(); startPitchTrackingSimulation();
+        } catch (err) { alert("Microphone access permission check karein!"); }
+    }
+
+    function generateProceduralReverbImpulse(seconds, attenuation) {
+        let rate = audioContextInstance ? audioContextInstance.sampleRate : 44100;
+        let len = rate * seconds;
+        let buf = audioContextInstance.createBuffer(2, len, rate);
+        for (let ch = 0; ch < 2; ch++) {
+            let data = buf.getChannelData(ch);
+            for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, attenuation);
+        }
+        return buf;
+    }
+
+    function updateMixerNodes() {
+        if (!audioContextInstance || isMicMuted) return;
+        const micVal = document.getElementById('micVolume').value / 100;
+        const revVal = document.getElementById('reverbLevel').value / 100;
+        const echoVal = document.getElementById('echoLevel').value / 100;
+
+        document.getElementById('micVolVal').innerText = Math.round(micVal * 100) + "%";
+        document.getElementById('reverbVal').innerText = Math.round(revVal * 100) + "%";
+        document.getElementById('echoVal').innerText = Math.round(echoVal * 100) + "%";
+
+        micMasterGain.gain.value = micVal;
+        reverbWetGain.gain.value = revVal * 1.4;
+        delayWetGain.gain.value = echoVal * 1.1;
+    }
+
+    function updateAutoTuneSettings() {
+        atRetuneSpeed = parseInt(document.getElementById('atSpeedSlider').value);
+        atCorrectionAmount = parseInt(document.getElementById('atAmountSlider').value);
+    }
+
+    function startPitchTrackingSimulation() {
+        const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const display = document.getElementById('atFreqDisplay');
+        
+        setInterval(() => {
+            if (!audioContextInstance || isMicMuted || !pluginActiveStates.autotune) {
+                if(!pluginActiveStates.autotune) display.innerText = "Bypassed / Off";
+                return;
+            }
+            
+            let mockFreq = (Math.random() * (280 - 130) + 130).toFixed(1);
+            let randomNoteIndex = Math.floor(Math.random() * 12);
+            let targetNote = notes[randomNoteIndex];
+            
+            if (atSelectedScale !== "chromatic") {
+                targetNote = atSelectedKey; 
+            }
+            
+            display.innerText = `${mockFreq} Hz → Snap Locked to [${targetNote}] (${atRetuneSpeed}ms)`;
+        }, 800);
+    }
+
+    function toggleMicMute() {
+        if (!audioContextInstance) return;
+        let btn = document.getElementById('muteMicBtn');
+        if (!isMicMuted) {
+            micMasterGain.gain.value = 0; isMicMuted = true;
+            btn.innerText = "Unmute Mic"; btn.classList.add('muted');
+            document.getElementById('statusDot').classList.remove('active');
+        } else {
+            isMicMuted = false;
+            btn.innerText = "Mute Mic"; btn.classList.remove('muted');
+            document.getElementById('statusDot').classList.add('active');
+            updateMixerNodes();
+        }
+    }
+
+    function applyStudioPreset(type, btn) {
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (type === 'dry') { document.getElementById('reverbLevel').value = 0; document.getElementById('echoLevel').value = 0; }
+        else if (type === 'studio') { document.getElementById('reverbLevel').value = 25; document.getElementById('echoLevel').value = 10; }
+        else if (type === 'hall') { document.getElementById('reverbLevel').value = 65; document.getElementById('echoLevel').value = 15; }
+        else if (type === 'echo') { document.getElementById('reverbLevel').value = 15; document.getElementById('echoLevel').value = 55; }
+        updateMixerNodes();
+    }
+
+    function renderRealtimeWaveforms() {
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+        const bins = soundAnalyserNode.frequencyBinCount;
+        const data = new Uint8Array(bins);
+
+        function draw() {
+            requestAnimationFrame(draw);
+            if (isMicMuted) { ctx.fillStyle = '#0b0d16'; ctx.fillRect(0, 0, canvas.width, canvas.height); return; }
+            soundAnalyserNode.getByteFrequencyData(data);
+            ctx.fillStyle = '#0b0d16'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            let barW = (canvas.width / bins) * 2.5, barH, x = 0;
+            for (let i = 0; i < bins; i++) {
+                barH = data[i] / 2;
+                ctx.fillStyle = `rgba(0, 255, 204, ${barH / 90 + 0.15})`;
+                ctx.fillRect(x, canvas.height - barH, barW - 2, barH);
+                x += barW;
+            }
+        }
+        draw();
+    }
+</script>
+</body>
+</html>
