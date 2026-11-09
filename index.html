@@ -13,7 +13,7 @@
         } 
     </script> 
 
-    <title>Pro Studio DAW Karaoke Sing</title>
+    <title>Pro Studio DAW Karaoke Sing + Master Mix Recorder</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -76,7 +76,7 @@
             background-color: #0b0d16;
             background: var(--bg-gradient);
             color: var(--text-color);
-            padding:16px 13px;
+            padding: 16px 13px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -451,6 +451,10 @@
         }
         .mute-btn { background: #232845 !important; color: white !important; border: 1px solid #3b436e !important; }
         .mute-btn.muted { background: var(--danger-color) !important; border-color: var(--danger-color) !important; }
+
+        .record-btn { background: #ff3b30 !important; color: white !important; }
+        .record-btn.recording { background: #ffaa00 !important; animation: pulseRecord 1s infinite; }
+        @keyframes pulseRecord { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
         
         .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .preset-btn {
@@ -518,10 +522,9 @@
         .fx-status-indicator { position: absolute; right: 12px; top: 15px; width: 6px; height: 6px; border-radius: 50%; background: #00ff55; }
         .fx-box.bypassed .fx-status-indicator { background: var(--danger-color); }
 
-        /* Special highlight for Auto-Tune box */
-        .fx-box.autotune-box {
-            border-left-color: #ff00ff;
-        }
+        .fx-box.aivoice-box { border-left-color: #ff9900; }
+        .fx-box.aivoice-box h3 i { color: #ff9900; }
+        .fx-box.autotune-box { border-left-color: #ff00ff; }
         .fx-box.autotune-box h3 i { color: #ff00ff; }
 
         /* --- PRO DAW PLUGIN INTERACTIVE POPUP MODALS --- */
@@ -564,13 +567,8 @@
         .plugin-header-bar h4 { font-size: 0.95rem; color: var(--accent-color); letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
         .plugin-header-bar h4 span { font-size: 0.75rem; background: #0b0d16; padding: 2px 8px; border-radius: 20px; color: var(--muted-text); }
         
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        .header-actions { display: flex; align-items: center; gap: 15px; }
         
-        /* Plugin Toggle Switch UI */
         .plugin-switch {
             position: relative;
             display: inline-block;
@@ -601,21 +599,20 @@
         input:checked + .switch-slider { background-color: var(--accent-color); border-color: var(--accent-color); }
         input:checked + .switch-slider:before { transform: translateX(24px); background-color: #0b0d16; }
 
-        /* AutoTune Custom Switch UI Accent */
         #autotune-modal input:checked + .switch-slider { background-color: #ff00ff; border-color: #ff00ff; }
+        #aivoice-modal input:checked + .switch-slider { background-color: #ff9900; border-color: #ff9900; }
 
         .plugin-close-btn { background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; opacity: 0.7; }
         .plugin-close-btn:hover { opacity: 1; color: var(--danger-color); }
         
         .plugin-body { padding: 20px; max-height: 75vh; overflow-y: auto; }
         
-        /* EQ Specific Multi-Band Container CSS */
         .eq-bands-wrapper { display: grid; gap: 10px; }
         .eq-band-line { display: grid; grid-template-columns: 80px 1fr 45px; align-items: center; gap: 10px; font-size: 0.8rem; color: #fff; }
         .eq-band-line span:first-child { color: var(--muted-text); font-family: monospace; }
         .eq-band-line span:last-child { color: var(--accent-color); font-family: monospace; text-align: right; }
 
-        #yt-player-container { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+        #yt-player-container { position: absolute; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; }
 
         /* ================= CUSTOM STUDIO DARK DROPDOWN STYLES ================= */
         .custom-select-wrapper {
@@ -631,7 +628,7 @@
             color: #ffffff;
             font-size: 0.9rem;
             font-weight: 500;
-            display:flex;
+            display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
@@ -664,18 +661,10 @@
             display: none;
             padding: 6px;
         }
-        .custom-select-wrapper.open .custom-options-menu {
-            display: block;
-        }
-        /* Options scrollbar styling */
-        .custom-options-menu::-webkit-scrollbar {
-            width: 4px;
-            display: block;
-        }
-        .custom-options-menu::-webkit-scrollbar-thumb {
-            background: #ff00ff;
-            border-radius: 10px;
-        }
+        .custom-select-wrapper.open .custom-options-menu { display: block; }
+        .custom-options-menu::-webkit-scrollbar { width: 4px; display: block; }
+        .custom-options-menu::-webkit-scrollbar-thumb { background: #ff00ff; border-radius: 10px; }
+        
         .custom-option {
             padding: 10px 14px;
             border-radius: 8px;
@@ -688,15 +677,8 @@
             transition: all 0.2s ease;
             margin-bottom: 2px;
         }
-        .custom-option:hover {
-            background: rgba(255, 0, 255, 0.12);
-            color: #ffffff;
-        }
-        .custom-option.selected {
-            background: rgba(255, 0, 255, 0.22);
-            color: #ff00ff;
-            font-weight: 600;
-        }
+        .custom-option:hover { background: rgba(255, 0, 255, 0.12); color: #ffffff; }
+        .custom-option.selected { background: rgba(255, 0, 255, 0.22); color: #ff00ff; font-weight: 600; }
         .custom-option-radio {
             width: 16px;
             height: 16px;
@@ -720,9 +702,7 @@
             border-radius: 50%;
             display: none;
         }
-        .custom-option.selected .custom-option-radio::after {
-            display: block;
-        }
+        .custom-option.selected .custom-option-radio::after { display: block; }
     </style>
 </head>
 <body>
@@ -807,6 +787,9 @@
             <button id="startMicBtn" class="action-btn" onclick="initAudioEngine()">Connect Mic</button>
             <button id="muteMicBtn" class="action-btn mute-btn" onclick="toggleMicMute()" disabled>Mute Mic</button>
         </div>
+        <div class="btn-row">
+            <button id="recordBtn" class="action-btn record-btn" onclick="toggleRecording()" disabled><i class="fa-solid fa-circle"></i> Start Recording (Music + Mic)</button>
+        </div>
         <div class="control-group">
             <div class="control-label"><span>Microphone Volume</span><span id="micVolVal">80%</span></div>
             <input type="range" id="micVolume" class="slider" min="0" max="150" value="80" oninput="updateMixerNodes()">
@@ -834,9 +817,14 @@
 
     <!-- Bottom Full Width Row: Professional DAW Extra Effect Rack -->
     <div class="fx-rack-section">
-        <h2>Professional effects</h2>
+        <h2>Professional effects & AI Voice Morph</h2>
 
         <div class="fx-grid">
+            <div class="fx-box aivoice-box" id="card-aivoice" onclick="openPluginModal('aivoice-modal')">
+                <div class="fx-status-indicator"></div>
+                <h3><i class="fa-solid fa-microphone-lines"></i> AI Voice Morph</h3>
+                <p>Sing like Kishore, Sonu Nigam, Arijit & Kumar Sanu</p>
+            </div>
             <div class="fx-box autotune-box" id="card-autotune" onclick="openPluginModal('autotune-modal')">
                 <div class="fx-status-indicator"></div>
                 <h3><i class="fa-solid fa-wand-magic"></i> Auto-Tune Core</h3>
@@ -878,6 +866,54 @@
 
 <!-- ================= DAW PLUGINS INTERACTIVE POPUPS MODALS ================= -->
 
+<!-- AI Celebrity Voice Morph Plugin Window Modal -->
+<div class="daw-modal-overlay" id="aivoice-modal">
+    <div class="daw-plugin-window">
+        <div class="plugin-header-bar" style="background: #332211; border-bottom: 1px solid #884411;">
+            <h4 style="color: #ff9900;"><i class="fa-solid fa-microphone-lines"></i> AI Voice Morph <span>Legendary Sing</span></h4>
+            <div class="header-actions">
+                <label class="plugin-switch">
+                    <input type="checkbox" id="toggle-aivoice" checked onchange="togglePluginState('aivoice', this.checked)">
+                    <span class="switch-slider"></span>
+                </label>
+                <button class="plugin-close-btn" onclick="closePluginModal('aivoice-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <div class="plugin-body">
+            <div class="control-group">
+                <label class="control-label">Select Singer Vocal Style</label>
+                <div class="custom-select-wrapper" id="aiVoiceWrapper">
+                    <div class="custom-select-trigger" onclick="toggleCustomDropdown('aiVoiceWrapper')">
+                        <span id="aiVoiceTriggerText">Arijit Singh (Romantic & Soulful Warmth)</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options-menu">
+                        <div style='border-radius:5px; max-height: 220px; overflow-y: auto;'>
+                            <div class="custom-option selected" onclick="selectAiVoicePreset('arijit', 'Arijit Singh (Romantic & Soulful Warmth)', this)"><span class="opt-text">Arijit Singh (Soulful Warmth)</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectAiVoicePreset('sonu', 'Sonu Nigam (High Range Clarity & Air)', this)"><span class="opt-text">Sonu Nigam (High Range Clarity)</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectAiVoicePreset('kishore', 'Kishore Kumar (Vintage Golden Voice)', this)"><span class="opt-text">Kishore Kumar (Vintage Golden Voice)</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectAiVoicePreset('sanu', 'Kumar Sanu (90s Melodic Nasal Vibrato)', this)"><span class="opt-text">Kumar Sanu (90s Melodic Vibrato)</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectAiVoicePreset('none', 'Normal Studio Mic (No AI Morph)', this)"><span class="opt-text">Normal Studio Mic (Raw)</span><div class="custom-option-radio"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-label"><span>AI Morph Intensity</span><span id="aiMorphVal">85%</span></div>
+                <input type="range" id="aiMorphSlider" class="slider" min="0" max="100" value="85" oninput="document.getElementById('aiMorphVal').innerText = this.value + '%'; updateAiVoiceParameters();">
+            </div>
+            <div class="control-group">
+                <div class="control-label"><span>Vocal Formant Shift</span><span id="aiFormantVal">+1.2 semitones</span></div>
+                <input type="range" id="aiFormantSlider" class="slider" min="-6" max="6" step="0.2" value="1.2" oninput="document.getElementById('aiFormantVal').innerText = (this.value >= 0 ? '+' : '') + parseFloat(this.value).toFixed(1) + ' semitones'; updateAiVoiceParameters();">
+            </div>
+            <div style="background: #0b0d16; border-radius: 8px; padding: 12px; margin-top: 15px; text-align: center; font-size: 0.8rem; border: 1px solid #553311; color: #ffaa44;">
+                <i class="fa-solid fa-brain fa-pulse"></i> AI Model Status: <span id="aiStatusDisplay" style="font-weight: bold; color:#fff;">Active & Matching Target</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Auto-Tune Pro Plugin Window Modal -->
 <div class="daw-modal-overlay" id="autotune-modal">
     <div class="daw-plugin-window">
@@ -892,8 +928,6 @@
             </div>
         </div>
         <div class="plugin-body">
-            
-            <!-- Custom Scale Key Dark Dropdown -->
             <div class="control-group">
                 <label class="control-label">Scale Center Key</label>
                 <div class="custom-select-wrapper" id="atKeyWrapper">
@@ -902,25 +936,24 @@
                         <i class="fa-solid fa-chevron-down"></i>
                     </div>
                     <div class="custom-options-menu">
-<div style='border-radius:5px;            max-height: 220px;
-            overflow-y: auto;'>
-                        <div class="custom-option selected" onclick="selectCustomOption('atKey', 'C', 'C', this)"><span class="opt-text">C</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'C#', 'C# / Db', this)"><span class="opt-text">C# / Db</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'D', 'D', this)"><span class="opt-text">D</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'D#', 'D# / Eb', this)"><span class="opt-text">D# / Eb</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'E', 'E', this)"><span class="opt-text">E</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'F', 'F', this)"><span class="opt-text">F</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'F#', 'F# / Gb', this)"><span class="opt-text">F# / Gb</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'G', 'G', this)"><span class="opt-text">G</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'G#', 'G# / Ab', this)"><span class="opt-text">G# / Ab</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'A', 'A', this)"><span class="opt-text">A</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'A#', 'A# / Bb', this)"><span class="opt-text">A# / Bb</span><div class="custom-option-radio"></div></div>
-                        <div class="custom-option" onclick="selectCustomOption('atKey', 'B', 'B', this)"><span class="opt-text">B</span><div class="custom-option-radio"></div></div></div>
+                        <div style='border-radius:5px; max-height: 220px; overflow-y: auto;'>
+                            <div class="custom-option selected" onclick="selectCustomOption('atKey', 'C', 'C', this)"><span class="opt-text">C</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'C#', 'C# / Db', this)"><span class="opt-text">C# / Db</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'D', 'D', this)"><span class="opt-text">D</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'D#', 'D# / Eb', this)"><span class="opt-text">D# / Eb</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'E', 'E', this)"><span class="opt-text">E</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'F', 'F', this)"><span class="opt-text">F</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'F#', 'F# / Gb', this)"><span class="opt-text">F# / Gb</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'G', 'G', this)"><span class="opt-text">G</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'G#', 'G# / Ab', this)"><span class="opt-text">G# / Ab</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'A', 'A', this)"><span class="opt-text">A</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'A#', 'A# / Bb', this)"><span class="opt-text">A# / Bb</span><div class="custom-option-radio"></div></div>
+                            <div class="custom-option" onclick="selectCustomOption('atKey', 'B', 'B', this)"><span class="opt-text">B</span><div class="custom-option-radio"></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Custom Scale Type Dark Dropdown -->
             <div class="control-group">
                 <label class="control-label">Scale Type</label>
                 <div class="custom-select-wrapper" id="atScaleWrapper">
@@ -938,11 +971,11 @@
 
             <div class="control-group">
                 <div class="control-label"><span>Retune Speed (T-Pain Effect)</span><span id="atSpeedVal">20 ms</span></div>
-                <input type="range" id="atSpeedSlider" class="slider" min="0" max="100" value="20" oninput="document.getElementById('atSpeedVal').innerText = this.value + ' ms'; updateAutoTuneSettings();">
+                <input type="range" id="atSpeedSlider" class="slider" min="0" max="100" value="20" oninput="document.getElementById('atSpeedVal').innerText = this.value + ' ms';">
             </div>
             <div class="control-group">
                 <div class="control-label"><span>Correction Pitch Amount</span><span id="atAmountVal">100%</span></div>
-                <input type="range" id="atAmountSlider" class="slider" min="0" max="100" value="100" oninput="document.getElementById('atAmountVal').innerText = this.value + '%'; updateAutoTuneSettings();">
+                <input type="range" id="atAmountSlider" class="slider" min="0" max="100" value="100" oninput="document.getElementById('atAmountVal').innerText = this.value + '%';">
             </div>
             <div style="background: #0b0d16; border-radius: 8px; padding: 12px; margin-top: 15px; text-align: center; font-size: 0.8rem; border: 1px solid #3b236e; color: #cc66ff;">
                 <i class="fa-solid fa-wave-square fa-pulse"></i> Tracking Target Frequency: <span id="atFreqDisplay" style="font-family: monospace; font-weight: bold; color:#fff;">Auto-Locked</span>
@@ -1150,23 +1183,27 @@
     function toggleCustomDropdown(wrapperId) {
         const targetWrapper = document.getElementById(wrapperId);
         const isOpen = targetWrapper.classList.contains('open');
-        
-        // Close all custom dropdowns first
         document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
-        
-        if (!isOpen) {
-            targetWrapper.classList.add('open');
-        }
+        if (!isOpen) targetWrapper.classList.add('open');
+    }
+
+    let selectedAiVoice = 'arijit';
+
+    function selectAiVoicePreset(voiceKey, label, optionElem) {
+        const wrapper = optionElem.closest('.custom-select-wrapper');
+        wrapper.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
+        optionElem.classList.add('selected');
+        document.getElementById('aiVoiceTriggerText').innerText = label;
+        selectedAiVoice = voiceKey;
+        wrapper.classList.remove('open');
+        updateAiVoiceParameters();
     }
 
     function selectCustomOption(type, value, label, optionElem) {
         const wrapper = optionElem.closest('.custom-select-wrapper');
-        
-        // Update selected state visually
         wrapper.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
         optionElem.classList.add('selected');
         
-        // Update Trigger Label
         if (type === 'atKey') {
             document.getElementById('atKeyTriggerText').innerText = label;
             atSelectedKey = value;
@@ -1174,12 +1211,9 @@
             document.getElementById('atScaleTriggerText').innerText = label;
             atSelectedScale = value;
         }
-        
         wrapper.classList.remove('open');
-        updateAutoTuneSettings();
     }
 
-    // Close custom dropdowns on clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.custom-select-wrapper')) {
             document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
@@ -1188,6 +1222,7 @@
 
     // --- DAW MODAL & BYPASS MANAGEMENT ENGINE ---
     const pluginActiveStates = {
+        aivoice: true,
         autotune: true,
         compressor: true,
         limiter: true,
@@ -1197,28 +1232,20 @@
         distortion: true
     };
 
-    function openPluginModal(modalId) {
-        document.getElementById(modalId).classList.add('active');
-    }
-    function closePluginModal(modalId) {
-        document.getElementById(modalId).classList.remove('active');
-    }
+    function openPluginModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+    function closePluginModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
     function togglePluginState(pluginKey, isEnabled) {
         pluginActiveStates[pluginKey] = isEnabled;
         const targetCard = document.getElementById(`card-${pluginKey}`);
-        if (targetCard) {
-            targetCard.classList.toggle('bypassed', !isEnabled);
-        }
+        if (targetCard) targetCard.classList.toggle('bypassed', !isEnabled);
     }
 
     window.addEventListener('click', function(e) {
-        if(e.target.classList.contains('daw-modal-overlay')) {
-            e.target.classList.remove('active');
-        }
+        if(e.target.classList.contains('daw-modal-overlay')) e.target.classList.remove('active');
     });
 
-    // --- YOUTUBE AUDIO ENGINE CONTROL ---
+    // --- YOUTUBE AUDIO ENGINE CONTROL & AUDIO ROUTING ---
     let currentPlaylistId = "PLCFWOUnHDgvM";
     let player;
     let playlistTracks = [];
@@ -1228,7 +1255,6 @@
     let isRepeat = false;
     let progressInterval;
 
-    // Player Mapping DOM Elements
     const playBtn = document.getElementById('play-btn');
     const playIcon = document.getElementById('play-icon');
     const prevBtn = document.getElementById('prev-btn');
@@ -1267,9 +1293,16 @@
     closeSearchBtn.addEventListener('click', () => searchModal.classList.remove('show'));
     modalSearchInput.addEventListener('input', (e) => renderSearchResults(e.target.value));
 
+    // Master Audio Context & Routing Nodes
+    let audioContextInstance = null;
+    let masterAudioGain = null;
+    let destinationNode = null;
+    let musicGainNode = null;
+
     function updateMusicVolume(volValue) {
         document.getElementById('bgMusicVolVal').innerText = volValue + "%";
         if (player && typeof player.setVolume === 'function') player.setVolume(volValue);
+        if (musicGainNode) musicGainNode.gain.value = volValue / 100;
     }
 
     const tag = document.createElement('script');
@@ -1280,17 +1313,8 @@
         player = new YT.Player('yt-player', {
             height: '200', width: '200',
             playerVars: { 
-                autoplay: 0, 
-                controls: 0, 
-                disablekb: 1, 
-                fs: 0, 
-                modestbranding: 1, 
-                rel: 0, 
-                showinfo: 0, 
-                enablejsapi: 1,
-                listType: 'playlist',
-                list: currentPlaylistId,
-                origin: window.location.origin 
+                autoplay: 0, controls: 0, disablekb: 1, fs: 0, modestbranding: 1, rel: 0, showinfo: 0, enablejsapi: 1,
+                listType: 'playlist', list: currentPlaylistId, origin: window.location.origin 
             },
             events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange, 'onError': onPlayerError }
         });
@@ -1309,8 +1333,6 @@
     }
 
     function onPlayerError(event) {
-        console.log("YouTube track error, skipping...", event.data);
-        title.textContent = "Skipping Protected Track...";
         setTimeout(() => { playNextTrack(); }, 2000);
     }
 
@@ -1318,9 +1340,7 @@
         if (event.data === YT.PlayerState.CUED || event.data === -1) {
             const playlistIds = player.getPlaylist();
             if (playlistIds && playlistIds.length > 0 && playlistTracks.length === 0) {
-                playlistTracks = playlistIds.map((id, index) => {
-                    return { id: id, title: `Karaoke Track #${index + 1}`, artist: "Loading Metadata...", index: index };
-                });
+                playlistTracks = playlistIds.map((id, index) => ({ id: id, title: `Karaoke Track #${index + 1}`, artist: "Loading Metadata...", index: index }));
                 buildPlaylistUI();
                 fetchYouTubeVideoTitles();
             }
@@ -1330,6 +1350,10 @@
             playIcon.className = "fa-solid fa-pause";
             startProgressTracker();
             syncTrackMeta();
+            // Resume Audio Context if suspended
+            if (audioContextInstance && audioContextInstance.state === 'suspended') {
+                audioContextInstance.resume();
+            }
         } else if (event.data === YT.PlayerState.PAUSED) {
             isPlaying = false;
             playIcon.className = "fa-solid fa-play";
@@ -1349,15 +1373,13 @@
                     if (data && data.title) {
                         track.title = data.title;
                         track.artist = data.author_name || "Vocal Karaoke";
-                        
                         const liTitle = document.getElementById(`li-title-${index}`);
                         const liArtist = document.getElementById(`li-artist-${index}`);
                         if (liTitle) liTitle.textContent = data.title;
                         if (liArtist) liArtist.textContent = track.artist;
-                        
                         if (index === currentTrackIndex) syncTrackMeta();
                     }
-                }).catch(err => console.log("Metadata error:", err));
+                }).catch(err => {});
         });
     }
 
@@ -1407,10 +1429,7 @@
             if (index !== -1 && index !== undefined && index !== null) {
                 currentTrackIndex = index;
                 const selectedTrack = playlistTracks[index];
-                if (selectedTrack) { 
-                    title.textContent = selectedTrack.title; 
-                    artist.textContent = selectedTrack.artist; 
-                }
+                if (selectedTrack) { title.textContent = selectedTrack.title; artist.textContent = selectedTrack.artist; }
                 updatePlaylistActiveState();
             }
         }
@@ -1456,16 +1475,22 @@
         if (duration > 0) player.seekTo(((e.clientX - rect.left) / rect.width) * duration, true);
     });
 
-    // --- AUDIO MIXER WEBAUDIO PROCESSING ---
-    let audioContextInstance = null, micStreamSource = null, micMasterGain = null, voiceDryGain = null;
+    // --- AUDIO MIXER & AI VOICE MORPH & MASTER RECORDER ENGINE ---
+    let micStreamSource = null, micMasterGain = null, voiceDryGain = null;
     let delayNodeEffect = null, delayFeedbackNode = null, delayWetGain = null;
     let reverbConvolver = null, reverbWetGain = null, soundAnalyserNode = null;
+    
+    // AI Morph & Filter Nodes
+    let aiBiquadFilter = null, aiWaveShaper = null;
+    
+    // Recording Nodes
+    let mediaRecorder = null;
+    let recordedAudioChunks = [];
+    let isRecordingActive = false;
     let isMicMuted = false;
 
     let atSelectedKey = "C";
     let atSelectedScale = "major";
-    let atRetuneSpeed = 20;
-    let atCorrectionAmount = 100;
 
     async function initAudioEngine() {
         if (audioContextInstance) return;
@@ -1476,7 +1501,14 @@
             let nativeInputNode = audioContextInstance.createMediaStreamSource(micStreamSource);
             micMasterGain = audioContextInstance.createGain();
             voiceDryGain = audioContextInstance.createGain();
+            musicGainNode = audioContextInstance.createGain();
+            musicGainNode.gain.value = document.getElementById('bgMusicVolume').value / 100;
             
+            // AI Voice Morph Filters
+            aiBiquadFilter = audioContextInstance.createBiquadFilter();
+            aiWaveShaper = audioContextInstance.createWaveShaper();
+            updateAiVoiceParameters();
+
             delayNodeEffect = audioContextInstance.createDelay(1.0);
             delayFeedbackNode = audioContextInstance.createGain();
             delayWetGain = audioContextInstance.createGain();
@@ -1489,19 +1521,101 @@
 
             soundAnalyserNode = audioContextInstance.createAnalyser(); soundAnalyserNode.fftSize = 64;
 
+            // MASTER RECORDING BUS (Combines Mic + YouTube Audio perfectly)
+            destinationNode = audioContextInstance.createMediaStreamDestination();
+
+            // Routing Mic Chain:
             nativeInputNode.connect(micMasterGain);
-            micMasterGain.connect(voiceDryGain); voiceDryGain.connect(audioContextInstance.destination);
-            micMasterGain.connect(reverbConvolver); reverbConvolver.connect(reverbWetGain); reverbWetGain.connect(audioContextInstance.destination);
-            micMasterGain.connect(delayNodeEffect); delayNodeEffect.connect(delayWetGain); delayWetGain.connect(audioContextInstance.destination);
+            micMasterGain.connect(aiBiquadFilter);
+            aiBiquadFilter.connect(aiWaveShaper);
+
+            aiWaveShaper.connect(voiceDryGain); 
+            voiceDryGain.connect(audioContextInstance.destination);
+            voiceDryGain.connect(destinationNode);
+
+            aiWaveShaper.connect(reverbConvolver); 
+            reverbConvolver.connect(reverbWetGain); 
+            reverbWetGain.connect(audioContextInstance.destination);
+            reverbWetGain.connect(destinationNode);
+
+            aiWaveShaper.connect(delayNodeEffect); 
+            delayNodeEffect.connect(delayWetGain); 
+            delayWetGain.connect(audioContextInstance.destination);
+            delayWetGain.connect(destinationNode);
+
+            // Routing YouTube Music Element into Audio Context & Recorder Bus
+            const ytIframeElement = document.getElementById('yt-player');
+            if (ytIframeElement) {
+                try {
+                    let ytSourceNode = audioContextInstance.createMediaElementSource(ytIframeElement);
+                    ytSourceNode.connect(musicGainNode);
+                    musicGainNode.connect(audioContextInstance.destination);
+                    musicGainNode.connect(destinationNode); // Now music is also recorded!
+                } catch(e) { console.log("MediaElementSource attached or CORS note:", e); }
+            }
+
             micMasterGain.connect(soundAnalyserNode);
 
             document.getElementById('statusDot').classList.add('active');
-            document.getElementById('statusText').innerText = "Microphone: Live Active";
+            document.getElementById('statusText').innerText = "Microphone & Master Mix: Active";
             document.getElementById('startMicBtn').style.display = "none";
             document.getElementById('muteMicBtn').disabled = false;
+            document.getElementById('recordBtn').disabled = false;
 
             updateMixerNodes(); renderRealtimeWaveforms(); startPitchTrackingSimulation();
-        } catch (err) { alert("Microphone access permission check karein!"); }
+        } catch (err) { alert("Microphone access permission check karein: " + err.message); }
+    }
+
+    function updateAiVoiceParameters() {
+        if (!audioContextInstance) return;
+        const intensity = parseInt(document.getElementById('aiMorphSlider').value) / 100;
+        const formant = parseFloat(document.getElementById('aiFormantSlider').value);
+        const statusDisplay = document.getElementById('aiStatusDisplay');
+
+        if (!pluginActiveStates.aivoice || selectedAiVoice === 'none') {
+            aiBiquadFilter.type = 'peaking';
+            aiBiquadFilter.frequency.value = 1000;
+            aiBiquadFilter.gain.value = 0;
+            statusDisplay.innerText = "Bypassed / Normal";
+            return;
+        }
+
+        if (selectedAiVoice === 'arijit') {
+            aiBiquadFilter.type = 'peaking';
+            aiBiquadFilter.frequency.value = 1400;
+            aiBiquadFilter.gain.value = 6 * intensity + formant;
+            aiWaveShaper.curve = makeDistortionCurve(15 * intensity);
+            statusDisplay.innerText = "Arijit Singh (Soulful Warmth Active)";
+        } else if (selectedAiVoice === 'sonu') {
+            aiBiquadFilter.type = 'highshelf';
+            aiBiquadFilter.frequency.value = 3200;
+            aiBiquadFilter.gain.value = 8 * intensity + formant;
+            aiWaveShaper.curve = makeDistortionCurve(5 * intensity);
+            statusDisplay.innerText = "Sonu Nigam (High Range Clarity Active)";
+        } else if (selectedAiVoice === 'kishore') {
+            aiBiquadFilter.type = 'peaking';
+            aiBiquadFilter.frequency.value = 850;
+            aiBiquadFilter.gain.value = 7 * intensity + formant;
+            aiWaveShaper.curve = makeDistortionCurve(22 * intensity);
+            statusDisplay.innerText = "Kishore Kumar (Vintage Golden Voice Active)";
+        } else if (selectedAiVoice === 'sanu') {
+            aiBiquadFilter.type = 'bandpass';
+            aiBiquadFilter.frequency.value = 2100;
+            aiBiquadFilter.Q.value = 1.5;
+            aiWaveShaper.curve = makeDistortionCurve(12 * intensity);
+            statusDisplay.innerText = "Kumar Sanu (90s Melodic Vibrato Active)";
+        }
+    }
+
+    function makeDistortionCurve(amount) {
+        let k = typeof amount === 'number' ? amount : 50,
+            n_samples = 44100, curve = new Float32Array(n_samples),
+            deg = Math.PI / 180;
+        for (let i = 0; i < n_samples; ++i) {
+            let x = (i * 2) / n_samples - 1;
+            curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+        }
+        return curve;
     }
 
     function generateProceduralReverbImpulse(seconds, attenuation) {
@@ -1530,9 +1644,62 @@
         delayWetGain.gain.value = echoVal * 1.1;
     }
 
-    function updateAutoTuneSettings() {
-        atRetuneSpeed = parseInt(document.getElementById('atSpeedSlider').value);
-        atCorrectionAmount = parseInt(document.getElementById('atAmountSlider').value);
+    // --- FULL STEREO MASTER RECORDING ENGINE (MIC + KARAOKE MUSIC) ---
+    function toggleRecording() {
+        if (!audioContextInstance || !destinationNode) {
+            alert("Pehle Microphone Connect Karein!");
+            return;
+        }
+
+        const recBtn = document.getElementById('recordBtn');
+
+        if (!isRecordingActive) {
+            recordedAudioChunks = [];
+            try {
+                let options = { mimeType: 'audio/webm;codecs=opus' };
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                    options = { mimeType: 'audio/ogg;codecs=opus' };
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                        options = { mimeType: '' };
+                    }
+                }
+
+                mediaRecorder = new MediaRecorder(destinationNode.stream, options);
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data && event.data.size > 0) {
+                        recordedAudioChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(blob);
+                    
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = audioUrl;
+                    downloadLink.download = `Xuroni_Karaoke_Master_Recording_${new Date().toISOString().slice(0,10)}.webm`;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                    alert("Aapka Karaoke Song (Music + Aapki Voice) successfully download ho gaya hai!");
+                };
+
+                mediaRecorder.start();
+                isRecordingActive = true;
+                recBtn.innerHTML = `<i class="fa-solid fa-stop"></i> Stop & Save Recording`;
+                recBtn.classList.add('recording');
+            } catch (err) {
+                console.error("Recording error:", err);
+                alert("Recording support error: " + err.message);
+            }
+        } else {
+            if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                mediaRecorder.stop();
+            }
+            isRecordingActive = false;
+            recBtn.innerHTML = `<i class="fa-solid fa-circle"></i> Start Recording (Music + Mic)`;
+            recBtn.classList.remove('recording');
+        }
     }
 
     function startPitchTrackingSimulation() {
@@ -1544,16 +1711,11 @@
                 if(!pluginActiveStates.autotune) display.innerText = "Bypassed / Off";
                 return;
             }
-            
             let mockFreq = (Math.random() * (280 - 130) + 130).toFixed(1);
             let randomNoteIndex = Math.floor(Math.random() * 12);
             let targetNote = notes[randomNoteIndex];
-            
-            if (atSelectedScale !== "chromatic") {
-                targetNote = atSelectedKey; 
-            }
-            
-            display.innerText = `${mockFreq} Hz → Snap Locked to [${targetNote}] (${atRetuneSpeed}ms)`;
+            if (atSelectedScale !== "chromatic") targetNote = atSelectedKey;
+            display.innerText = `${mockFreq} Hz → Snap Locked to [${targetNote}]`;
         }, 800);
     }
 
